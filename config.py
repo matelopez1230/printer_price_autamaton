@@ -1,64 +1,32 @@
 # config.py
-# Configuración centralizada de impresoras y carga de variables de entorno
+import json
+import logging
+from pathlib import Path
 
-import os
-from dotenv import load_dotenv
+logger = logging.getLogger(__name__)
 
-# Cargar variables desde .env (busca en el directorio actual y padres)
-load_dotenv()
+CONFIG_FILE = Path(__file__).parent / "impresoras.json"
 
-# ========== IMPRESORAS (configuración fija) ==========
-CONFIG = {
-    "192.168.16.22": {
-        "ruta": "/general/information.html?kind=item",
-        "metodo": "contador_paginas"
-    },
-    "192.168.16.23": {
-        "ruta": "/counter.asp?Lang=en-us",
-        "metodo": "page_total"
-    },
-    "192.168.16.190": {
-        "ruta": "/",
-        "metodo": "generico"
-    },
-    "192.168.16.21": {
-        "ruta": "/counter.asp?Lang=en-us",
-        "metodo": "page_total"
-    },
-    "192.168.15.153": {
-        "ruta": "/counter.asp?Lang=en-us",
-        "metodo": "page_total"
-    },
-    "192.168.14.150": {
-        "ruta": "/",
-        "metodo": "generico"
-    }
-}
+def cargar_configuracion():
+    """Carga la configuración de impresoras desde el archivo JSON."""
+    if not CONFIG_FILE.exists():
+        logger.error(f"Archivo de configuración {CONFIG_FILE} no encontrado.")
+        return [], {}, {}
 
-NOMBRES = {
-    "192.168.16.22": "Brother MFC-L2720DW",
-    "192.168.16.23": "RICOH M320F",
-    "192.168.16.190": "Brother DCP-7065DN",
-    "192.168.16.21": "RICOH M320F",
-    "192.168.15.153": "RICOH M320F",
-    "192.168.14.150": "Brother MFC-7460DN"
-}
+    try:
+        with open(CONFIG_FILE, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+    except json.JSONDecodeError as e:
+        logger.error(f"Error al parsear {CONFIG_FILE}: {e}")
+        return [], {}, {}
 
-SECTORES = {
-    "192.168.16.22": "C.A.C",
-    "192.168.16.23": "Administracion",
-    "192.168.16.190": "Oficinas atras P.A.",
-    "192.168.16.21": "RRHH",
-    "192.168.15.153": "Remitos",
-    "192.168.14.150": "Oficina P.B."
-}
+    impresoras = data.get('impresoras', [])
+    config_dict = {imp['ip']: {'ruta': imp['ruta'], 'metodo': imp['metodo']} for imp in impresoras}
+    nombres = {imp['ip']: imp['nombre'] for imp in impresoras}
+    sectores = {imp['ip']: imp['sector'] for imp in impresoras}
 
-# ========== VARIABLES DE ENTORNO ==========
-REMITENTE = os.getenv("REMITENTE")
-CONTRASENIA = os.getenv("CONTRASENIA")
-RECIPIENTES = os.getenv("RECIPIENTES")
-RUTA_EXCEL = os.getenv("RUTA_EXCEL")
+    logger.info(f"Cargadas {len(impresoras)} impresoras desde {CONFIG_FILE}")
+    return impresoras, config_dict, nombres, sectores
 
-# Validar que las variables críticas estén definidas
-if not all([REMITENTE, CONTRASENIA, RECIPIENTES, RUTA_EXCEL]):
-    raise EnvironmentError("Faltan variables de entorno. Revisa el archivo .env")
+# Cargar configuración al importar el módulo
+IMPRESORAS, CONFIG, NOMBRES, SECTORES = cargar_configuracion()
