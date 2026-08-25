@@ -40,7 +40,7 @@ if __name__ == "__main__":
         exit(1)
 
     # Ruta al archivo Excel (solo para importación inicial)
-    ruta_excel = Path(r"C:\Users\mcescato\Desktop\Relevamiento_impresoras_vigente.xlsx")
+    ruta_excel = Path(r"PATH\TO\FILE")
 
     # Inicializar base de datos
     init_db()
