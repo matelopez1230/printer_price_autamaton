@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 if __name__ == "__main__":
     # Ruta al archivo Excel (ajústala si es necesario)
-    ruta_excel = Path(r"C:\Users\mcescato\Desktop\Impresoras\programa_ordenado\Relevamiento_impresoras_vigente.xlsx")
+    ruta_excel = Path(r"PATH\TO\FILE")
     
     # Inicializar base de datos (crea la tabla si no existe)
     init_db()
