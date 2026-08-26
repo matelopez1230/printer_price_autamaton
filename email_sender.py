@@ -86,7 +86,7 @@ def generar_cuerpo_html(resumen: dict) -> str:
         </style>
     </head>
     <body>
-        <h2>📊 Reporte de Impresoras</h2>
+        <h2>  Reporte de Impresoras</h2>
         <p><strong>Fecha de ejecución:</strong> {fecha}</p>
         {mensaje_error}
         <h3>Resumen por impresora:</h3>

@@ -4,25 +4,24 @@ from pathlib import Path
 from datetime import datetime
 
 from config import IMPRESORAS, CONFIG, NOMBRES, SECTORES
-from db_manager import init_db, tiene_datos, importar_desde_excel, guardar_registro, obtener_ultimo_registro, obtener_resumen
+from db_manager import init_db, tiene_datos, guardar_registro, obtener_ultimo_registro, obtener_resumen
 from lector import obtener_contador
 from email_sender import enviar_correo, generar_cuerpo_html
 
 """
 ------------------------INFORMACION IMPORTANTE------------------------
-Este script realiza las siguientes funciones:
-1. Inicializa la base de datos SQLite si no existe.
-2. Si la base de datos está vacía, importa los registros desde un archivo Excel.
-3. Para cada impresora configurada, obtiene el contador actual desde la impresora.
-4. Compara el contador actual con el último registro en SQLite para calcular la diferencia.
-5. Guarda el nuevo registro en SQLite.
-6. Genera un resumen de todos los registros y envía un correo electrónico con el reporte.
-Requisitos:
+Este script realiza el monitoreo diario de las impresoras.
+Requisitos previos:
+- La base de datos SQLite debe contener datos históricos (ejecutar primero import_historical.py).
+- Archivo de configuración impresoras.json con las impresoras a monitorear (copiar formato existente en impresoras.json). 
 
-- Archivo de configuración `impresoras.json` con las impresoras a monitorear.
-    - En cada impresora hay un 'Metodo' que refiere a como esta configurado el sitio del que se obtiene la información de la cantidad de hojas usadas
 
-- Archivo Excel con los registros históricos (solo para la importación inicial).
+CASO DE PRIMERA IMPLEMENTACIÓN:
+1. Ejecutar import_historical.py para cargar el historial desde el Excel a la base de datos SQLite.
+2. Configurar impresoras.json con las impresoras a monitorear. (EN MI CASO NO HIZO FALTA)
+2.2 Configurar config.py con los nombres y sectores de las impresoras.
+2.3 Configurar .env con los datos del correo electrónico para enviar el resumen mensual.
+3. Ejecutar main.py para realizar el monitoreo diario y enviar el correo con el resumen.
 ----------------------------------------------------------------------
 """
 
@@ -39,20 +38,13 @@ if __name__ == "__main__":
         logger.error("No hay impresoras configuradas. Verifica impresoras.json")
         exit(1)
 
-    # Ruta al archivo Excel (solo para importación inicial)
-    ruta_excel = Path(r"PATH\TO\FILE")
-
-    # Inicializar base de datos
+    # Inicializar base de datos (crea la tabla si no existe)
     init_db()
 
-    # Si la base de datos está vacía, importar desde Excel
+    # Verificar que la base de datos no esté vacía
     if not tiene_datos():
-        logger.info("Base de datos vacía. Importando desde Excel...")
-        importados = importar_desde_excel(ruta_excel)
-        if importados == 0:
-            logger.warning("No se importaron datos. Usando solo configuraciones actuales.")
-    else:
-        logger.info("SQLite ya contiene datos. No se importará el Excel.")
+        logger.error("La base de datos está vacía. Debes ejecutar primero 'python import_historical.py' para cargar el historial.")
+        exit(1)
 
     # Fecha actual para el nuevo registro
     hoy = datetime.now()
@@ -83,7 +75,7 @@ if __name__ == "__main__":
             ultimo_contador = None
             logger.info("No hay historial en SQLite para esta IP.")
 
-        # 3. Calcular diferencia
+        # 3. Calcular diferencia (variación)
         if contador_actual is not None and ultimo_contador is not None:
             diferencia = contador_actual - ultimo_contador
         else:
@@ -91,10 +83,10 @@ if __name__ == "__main__":
 
         logger.info(f"Contador actual: {contador_actual}, Diferencia: {diferencia}")
 
-        # 4. Guardar en SQLite
+        # 4. Guardar en SQLite el nuevo registro
         guardar_registro(ip, nombre, sector, fecha_sql, contador_actual, diferencia)
 
-        # 5. Guardar en resumen
+        # 5. Guardar en resumen para el correo
         resumen['impresoras'][ip] = {
             'nombre': nombre,
             'sector': sector,
@@ -111,6 +103,6 @@ if __name__ == "__main__":
     exito = enviar_correo(asunto=asunto, cuerpo_html=cuerpo_html)
 
     if exito:
-        logger.info("✅ Proceso completado.")
+        logger.info("Proceso completado Exitosamente.")
     else:
-        logger.error("❌ Error al enviar correo.")
+        logger.error(" Error al enviar correo.")

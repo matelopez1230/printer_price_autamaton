@@ -74,6 +74,22 @@ def obtener_ultimo_registro(ip: str) -> Optional[Dict[str, Any]]:
         return {'fecha': row[0], 'contador': row[1], 'diferencia': row[2], 'estado': row[3]}
     return None
 
+def obtener_ultima_fecha_por_ip() -> Dict[str, str]:
+    """
+    Devuelve un diccionario con la IP como clave y la fecha (YYYY-MM-DD)
+    del último registro para esa IP.
+    """
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+    c.execute("""
+        SELECT ip, MAX(fecha) as ultima_fecha
+        FROM registros
+        GROUP BY ip
+    """)
+    rows = c.fetchall()
+    conn.close()
+    return {ip: fecha for ip, fecha in rows}
+
 def importar_desde_excel(ruta_excel: Path) -> int:
     """
     Importa todos los registros del Excel a SQLite, calculando diferencias.
