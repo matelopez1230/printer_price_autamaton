@@ -1,46 +1,19 @@
 {
   "impresoras": [
     {
-      "ip": "192.168.16.22",
-      "nombre": "Brother MFC-L2720DW",
-      "sector": "C.A.C",
-      "ruta": "/general/information.html?kind=item",
-      "metodo": "contador_paginas" 
+      "ip": "DIRECCION IP IMPRESORA 1",
+      "nombre": "MARCA DE IMPRESORA",
+      "sector": "SECTOR DONDE ESTA EN LA EMPRESA",
+      "ruta": "/RUTA/DONDE/ESTA/INFO/PAGINA",
+      "metodo": "COMO SE ALMACENA EN INSPECT" 
     },
     {
-      "ip": "192.168.16.23",
-      "nombre": "RICOH M320F",
-      "sector": "Administracion",
-      "ruta": "/counter.asp?Lang=en-us",
-      "metodo": "page_total"
-    },
-    {
-      "ip": "192.168.16.190",
-      "nombre": "Brother DCP-7065DN",
-      "sector": "Oficinas atras P.A.",
-      "ruta": "/",
-      "metodo": "generico"
-    },
-    {
-      "ip": "192.168.16.21",
-      "nombre": "RICOH M320F",
-      "sector": "RRHH",
-      "ruta": "/counter.asp?Lang=en-us",
-      "metodo": "page_total"
-    },
-    {
-      "ip": "192.168.15.153",
-      "nombre": "RICOH M320F",
-      "sector": "Remitos",
-      "ruta": "/counter.asp?Lang=en-us",
-      "metodo": "page_total"
-    },
-    {
-      "ip": "192.168.14.150",
-      "nombre": "Brother MFC-7460DN",
-      "sector": "Oficina P.B.",
-      "ruta": "/",
-      "metodo": "generico"
+      "ip": "DIRECCION IMPRESORA 2",
+      "nombre": "MARCA DE IMPRESORA",
+      "sector": "SECTOR DONDE ESTA EN LA EMPRESA",
+      "ruta": "/RUTA/DONDE/ESTA/INFO/PAGINA",
+      "metodo": "COMO SE ALMACENA EN INSPECT"
     }
+      AGREGAR N IMPRESORAS EN CASO DE SER NECESARIO
   ]
 }
