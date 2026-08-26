@@ -67,7 +67,7 @@ def extraer_contador_page_total(html: str) -> Optional[int]:
                     match = re.search(r'\d+', texto_num)
                     if match:
                         valor = int(match.group(0))
-                        # Descartar 320 y números menores a 1000 (pueden ser falsos)
+                        # Descartar 320 y números menores a 1000 (pueden ser falsos) (aplico a nuestro caso, puede que tenga que modificar en caso que arranque a contar desde cero)
                         if valor != 320 and valor >= 1000:
                             return valor
                     break
