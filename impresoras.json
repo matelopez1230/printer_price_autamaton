@@ -1,0 +1,53 @@
+{
+  "impresoras": [
+    {
+      "ip": "192.168.16.22",
+      "nombre": "Brother MFC-L2720DW",
+      "sector": "C.A.C",
+      "ruta": "/general/information.html?kind=item",
+      "metodo": "contador_paginas"
+    },
+    {
+      "ip": "192.168.16.23",
+      "nombre": "RICOH M320F",
+      "sector": "Administracion",
+      "ruta": "/counter.asp?Lang=en-us",
+      "metodo": "page_total"
+    },
+    {
+      "ip": "192.168.16.190",
+      "nombre": "Brother DCP-7065DN",
+      "sector": "Oficinas atras P.A.",
+      "ruta": "/",
+      "metodo": "generico"
+    },
+    {
+      "ip": "192.168.16.21",
+      "nombre": "RICOH M320F",
+      "sector": "RRHH",
+      "ruta": "/counter.asp?Lang=en-us",
+      "metodo": "page_total"
+    },
+    {
+      "ip": "192.168.15.153",
+      "nombre": "RICOH M320F",
+      "sector": "Remitos (Lagos)",
+      "ruta": "/counter.asp?Lang=en-us",
+      "metodo": "page_total"
+    },
+    {
+      "ip": "192.168.14.150",
+      "nombre": "Brother MFC-7460DN",
+      "sector": "Oficina Planta baja (San Lorenzo)",
+      "ruta": "/main/main.html",
+      "metodo": "contador_paginas"
+    },
+    {
+      "ip": "192.168.14.141",
+      "nombre": "Brother MFC-7065DN",
+      "sector": "Oficina Planta alta (San Lorenzo)",
+      "ruta": "/main/main.html",
+      "metodo": "contador_paginas"
+    }
+  ]
+}
